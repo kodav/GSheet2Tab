@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Google sheet as table</title>
+    <meta charset="utf-8" />
+    <script type="text/javascript" language="javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.css">
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.js"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      $(document).ready(function() {
+          $('#parts').DataTable({
+              "language": {
+                  "zeroRecords": "Loading data...",
+              }
+              });
+            });
+
+            google.load('visualization', '1', {
+              packages: ['corechart'],
+              callback: function () {
+                var query = new google.visualization.Query('https://docs.google.com/spreadsheets/d/1Q_V_TIi7im3lRRHnOgvf8BHVAMGKP6sXUOTQFPvFzxg/edit?usp=sharing');
+                query.setQuery('select *');
+                query.send(handleQueryResponse);
+              }
+            });
+
+            function handleQueryResponse(response) {
+              if (response.isError()) {
+                alert('Error in query: ' + response.getMessage() + ' ' + response.getDetailedMessage());
+                return;
+              }
+              var data = response.getDataTable();
+              var t = $('#parts').DataTable();
+              for (r = 0; r < data.getNumberOfRows(); r++) {
+                var val = [];
+                for (c = 0; c < 11; c++) {
+                    if (data.getColumnType(c) == "date"){
+                  var date = new Date(data.getValue(r, c));
+                  val[c] = date.toISOString().substring(0, 10);
+                    } else {
+                  val[c] = data.getValue(r, c);
+                    }
+                }
+                t.row.add( val).draw( false );
+            }
+      }
+    </script>
+  </head>
+  <body>
+    <table id="parts" class="display">
+      <thead>
+        <tr>
+          <th>Ersatzteil\Werkzeug</th>
+          <th>Standort</th>
+          <th>Zustand</th>
+          <th>Hersteller</th>
+          <th>Bezeichnung</th>
+          <th>Artikelnummer</th>
+          <th>Preis</th>
+          <th>Preiskategorie</th>
+          <th>Verfügbar</th>
+          <th>Verfügbar ab</th>
+          <th>Verkauft von</th>
+        </tr>
+      </thead>
+      <tbody>
+      </tbody>
+    </table>
+  </body>
+</html>
