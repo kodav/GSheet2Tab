@@ -1,2 +1,2 @@
 # GSheet2Tab
-Show Google Sheet in site as table
+Show Google Sheet in HTML as table
