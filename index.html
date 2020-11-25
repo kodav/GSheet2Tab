@@ -19,7 +19,7 @@
             google.load('visualization', '1', {
               packages: ['corechart'],
               callback: function () {
-                var query = new google.visualization.Query('https://docs.google.com/spreadsheets/d/1Q_V_TIi7im3lRRHnOgvf8BHVAMGKP6sXUOTQFPvFzxg/edit?usp=sharing');
+                var query = new google.visualization.Query('<YOUR SHARE LINK TO GOOGLE SHEET>');
                 query.setQuery('select *');
                 query.send(handleQueryResponse);
               }
